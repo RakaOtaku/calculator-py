@@ -49,16 +49,19 @@ class calculator:
     def bind_keys(self):
         self.window.bind("<Return>", lambda event: self.evaluate())
         for key in self.digits:
-            self.window.bind(str(key), lambda event, digit=key: self.add_to_expression(digit))
+            self.window.bind(str(key), lambda event,
+                             digit=key: self.add_to_expression(digit))
 
         for key in self.operations:
-            self.window.bind(key, lambda event, operator=key: self.append_operator(operator))
+            self.window.bind(key, lambda event,
+                             operator=key: self.append_operator(operator))
 
     def create_special_buttons(self):
         self.create_clear_button()
         self.create_equals_button()
         self.create_square_button()
         self.create_sqrt_button()
+        self.create_delete_button()
 
     def create_display__labels(self):
         total_label = tk.Label(self.display_frame, text=self.total_expression,
@@ -141,13 +144,22 @@ class calculator:
             self.total_expression = ""
         except Exception as e:
             self.current_expression = "Error"
-        finally: 
+        finally:
             self.update_label()
+
+    def create_delete_button(self):
+        button = tk.Button(self.buttons_frame, text="DEL", bg=OFF_WHITE,
+                           fg=LABEL_COLOR, font=DEFAULT_FONT_SYTLE, borderwidth=0, command=self.delete)
+        button.grid(row=4, column=3, sticky=tk.NSEW)
+
+    def delete(self):
+        self.current_expression = self.current_expression[:-1]
+        self.update_label()
 
     def create_equals_button(self):
         button = tk.Button(self.buttons_frame, text="=", bg=LIGHT_BLUE,
                            fg=LABEL_COLOR, font=DEFAULT_FONT_SYTLE, borderwidth=0, command=self.evaluate)
-        button.grid(row=4, column=3, columnspan=2, sticky=tk.NSEW)
+        button.grid(row=4, column=4, sticky=tk.NSEW)
 
     def create_buttons_frame(self):
         frame = tk.Frame(self.window)
